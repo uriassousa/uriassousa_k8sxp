@@ -1,0 +1,78 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    deployment.kubernetes.io/revision: "2"
+  creationTimestamp: 2018-04-03T15:46:15Z
+  generation: 2
+  labels:
+    run: nginx
+  name: nginx3
+  namespace: default
+  resourceVersion: "37313"
+  selfLink: /apis/extensions/v1beta1/namespaces/default/deployments/nginx3
+  uid: 24d6bdf6-3756-11e8-8ccc-000c299e8213
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 5
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      run: nginx
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: appurias1
+        dc: UK
+        run: nginx
+        ambiente: prod
+    spec:
+      containers:
+      - image: nginx
+        imagePullPolicy: Always
+        name: nginx
+        volumeMounts:
+        - name: nfs-vol
+          mountPath: /usr/share/nginx/html
+        ports:
+        - containerPort: 80
+          protocol: TCP
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      volumes:
+        - name: nfs-vol
+          persistentVolumeClaim:
+             claimName: urias-pvc
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+      nodeSelector:
+         dc: UK
+status:
+  availableReplicas: 2
+  conditions:
+  - lastTransitionTime: 2018-04-03T15:46:15Z
+    lastUpdateTime: 2018-04-03T15:49:56Z
+    message: ReplicaSet "nginx3-59d4b8998d" has successfully progressed.
+    reason: NewReplicaSetAvailable
+    status: "True"
+    type: Progressing
+  - lastTransitionTime: 2018-04-04T12:49:01Z
+    lastUpdateTime: 2018-04-04T12:49:01Z
+    message: Deployment has minimum availability.
+    reason: MinimumReplicasAvailable
+    status: "True"
+    type: Available
+  observedGeneration: 2
+  readyReplicas: 2
+  replicas: 2
+  updatedReplicas: 2
